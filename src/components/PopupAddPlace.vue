@@ -10,6 +10,7 @@
           name="name"
           class="popup__input popup__input_type_name"
           placeholder="Название"
+          required
         />
         <input
           v-model="link"
@@ -17,6 +18,7 @@
           name="link"
           class="popup__input popup__input_type_link-url"
           placeholder="Ссылка на картинку"
+          required
         />
         <button type="submit" class="button popup__button popup__button_add">+</button>
       </form>

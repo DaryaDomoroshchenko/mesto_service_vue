@@ -1,6 +1,6 @@
 <template>
   <div class="place-card">
-    <div class="place-card__image" :style="`background-image: url(${url})`">
+    <div @click="showImage" class="place-card__image" :style="`background-image: url(${url})`">
       <button
         @click="removeCard"
         class="place-card__delete-icon"
@@ -19,7 +19,6 @@
 
 <script>
 export default {
-
   props: ["name", "url"],
 
   data() {
@@ -29,13 +28,17 @@ export default {
   },
 
   methods: {
-
     toggleLike() {
       this.like = !this.like;
     },
 
     removeCard() {
       this.$emit("remove");
+    },
+
+    showImage() {
+      const imageUrl = this.url;
+      this.$emit("show-image", imageUrl);
     }
   }
 };

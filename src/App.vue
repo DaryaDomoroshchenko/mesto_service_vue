@@ -7,13 +7,15 @@
 
     <div class="profile root__section">
       <div class="user-info">
-        <div class="user-info__photo"></div>
+        <div @click="changePopupIsShown=true" class="user-info__photo"
+          :style="`background-image: url(${avatarUrl})`"
+        />
         <div class="user-info__data">
-          <h1 class="user-info__name">Даша Путешественница</h1>
-          <p class="user-info__job">Программист-неофит</p>
-          <button class="button user-info__edit-button">Edit</button>
+          <h1 class="user-info__name">{{ profileName }}</h1>
+          <p class="user-info__job">{{ about }}</p>
+          <button @click="editPopupIsShown=true" class="button user-info__edit-button">Edit</button>
         </div>
-        <button @click="popupIsShown=true" class="button user-info__plus-button">+</button>
+        <button @click="addPopupIsShown=true" class="button user-info__plus-button">+</button>
       </div>
     </div>
 
@@ -24,28 +26,53 @@
         :name="card.name"
         :url="card.link"
         @remove="deleteCard(card.id)"
+        @show-image="showImage(card.link)"
       />
     </div>
 
     <PopupAddPlace
-      v-if="popupIsShown"
-      @hide-popup="popupIsShown=false"
+      v-if="addPopupIsShown"
+      @hide-popup="addPopupIsShown=false"
       @add-card="addCard"
+    />
+
+    <PopupEditProfile
+      v-if="editPopupIsShown"
+      @hide-popup="editPopupIsShown=false"
+      @edit-profile="editProfile"
+    />
+
+    <PopupChangeAvatar
+      v-if="changePopupIsShown"
+      @hide-popup="changePopupIsShown=false"
+      @change-avatar="changeAvatar"
+    />
+
+    <PopupImage
+      v-if="imagePopupIsShown"
+      @hide-popup="imagePopupIsShown=false"
+      :image="imageUrl"
     />
 
   </div>
 </template>
 
 <script>
-import Card from "./components/Card.vue";
-import PopupAddPlace from "./components/PopupAddPlace.vue";
+import Card from "@/components/Card.vue";
+import PopupAddPlace from "@/components/PopupAddPlace.vue";
+import PopupEditProfile from "@/components/PopupEditProfile.vue";
+import PopupChangeAvatar from "@/components/PopupChangeAvatar.vue";
+import PopupImage from "@/components/PopupImage.vue";
 
 export default {
   name: 'App',
 
   components: {
     Card,
-    PopupAddPlace
+    PopupAddPlace,
+    PopupEditProfile,
+    PopupChangeAvatar,
+    PopupImage
   },
 
   data() {
@@ -107,7 +134,17 @@ export default {
         }
       ],
 
-      popupIsShown: false,
+      profileName: "Даша Путешественница",
+      about: "Программист-неофит",
+
+      avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPtZfyeQViRSxXaMp7V0ZZcq9Omtn8PJWmcQ&usqp=CAU",
+
+      addPopupIsShown: false,
+      editPopupIsShown: false,
+      changePopupIsShown: false,
+      imagePopupIsShown: false,
+
+      imageUrl: ""
     };
   },
 
@@ -120,6 +157,21 @@ export default {
       const { name, link } = data;
       const id = Date.now();
       this.cards.push({ name, link, id });
+    },
+
+    editProfile(userInfo) {
+      this.profileName = userInfo.profileName;
+      this.about = userInfo.about;
+    },
+
+    changeAvatar(url) {
+      this.avatarUrl = url;
+    },
+
+    showImage(link) {
+      console.log(link);
+      this.imageUrl = link;
+      this.imagePopupIsShown = true
     }
   }
 };
