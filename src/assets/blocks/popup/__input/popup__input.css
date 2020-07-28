@@ -8,6 +8,7 @@
   box-sizing: border-box;
   padding: 5px 6px 13px;
   margin-top: 24px;
+  outline: none;
 }
 
 .popup__input:first-of-type {
